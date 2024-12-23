@@ -1,0 +1,37 @@
+api_version : v1
+kind : ingress
+metadata: 
+  name: kuberntes-prometheus-stack
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/target-type: ip
+
+
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          -path:/prometheus
+           pathType: Prefix
+           backend:
+             service:
+               name: prometheus-service
+               port:
+                 number: 9090
+          -path:/grafana
+           pathType: Prefix
+           backend:
+             service:
+               name: grafana-service
+               port:
+                 number: 3000
+          -path:/alertmanager
+           pathType: Prefix
+           backend:
+             service:
+               name: alertmanager-service
+               port:
+                 number: 9093
+
